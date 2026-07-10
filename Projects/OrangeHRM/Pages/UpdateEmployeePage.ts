@@ -1,0 +1,50 @@
+import { Page, expect } from '@playwright/test';
+
+export class UpdateEmployeePage {
+
+    constructor(private page: Page) {}
+
+    async goto() {
+        await this.page.goto(
+            'https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList'
+        );
+    }
+
+    async searchEmployee(employeeName: string) {
+        const hintsInput = this.page.getByRole('textbox', {
+            name: 'Type for hints...'
+        }).first();
+
+        await hintsInput.fill(employeeName);
+        await this.page.getByText(employeeName, { exact: false }).first().click();
+        await this.page.getByRole('button', { name: /Search/i }).click();
+
+        await expect(
+            this.page.locator('.oxd-table-body')
+        ).toBeVisible();
+    }
+
+    async updateEmployee(employeeName: string) {
+        const employeeRow = this.page.locator('.oxd-table-card, [role="row"]').filter({ hasText: employeeName }).first();
+
+        await expect(employeeRow).toBeVisible();
+        await this.page.locator('.oxd-table-card-cell-checkbox > .oxd-checkbox-wrapper > label > .oxd-checkbox-input > .oxd-icon').click();
+        await this.page.getByRole('button').filter({ hasText: /^$/ }).nth(3).click();
+        await this.page.locator('.oxd-icon.bi-caret-down-fill.oxd-select-text--arrow').first().click();
+        await this.page.getByText('Indian').click();
+        await this.page.locator('div:nth-child(2) > .oxd-input-group > div:nth-child(2) > .oxd-select-wrapper > .oxd-select-text > .oxd-select-text--after > .oxd-icon').click();
+        await this.page.getByText('Married').click();
+        await this.page.locator('.oxd-radio-input').first().click();
+        await this.page.locator('div:nth-child(5) > div:nth-child(2) > div > .oxd-input-group > div:nth-child(2) > .oxd-date-wrapper > .oxd-date-input > .oxd-icon').click();
+        await this.page.getByText('2026', { exact: true }).click();
+        await this.page.getByText('1970').click();
+        await this.page.getByText('5', { exact: true }).click();
+        await this.page.locator('form').filter({ hasText: 'Employee Full NameEmployee' }).getByRole('button').click();
+
+        await expect(
+            this.page.getByText(/Successfully Updated/i)
+        ).toBeVisible();
+
+        console.log('Employee updated successfully');
+    }
+}
