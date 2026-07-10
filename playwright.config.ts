@@ -9,7 +9,7 @@ export default defineConfig({
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Retry once*/
-  retries: 1,
+  retries: 0,
   reporter: [
     ['html', { open: 'never' }],
     ['allure-playwright']

@@ -5,10 +5,9 @@ export class DeleteEmployeePage {
     constructor(private page: Page) {}
 
     async goto() {
-        await this.page.goto(
-            'https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList'
-        );
-    }
+    await this.page.getByRole('link', { name: 'PIM', exact: true }).click();
+    await this.page.waitForLoadState('networkidle');
+}
 
     async searchEmployee(employeeName: string) {
         const hintsInput = this.page.getByRole('textbox', {
