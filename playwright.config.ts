@@ -7,9 +7,10 @@ dotenv.config({
 export default defineConfig({
   testDir: './Projects',
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false,
+  workers: 1,
   /* Retry once*/
-  retries: 1,
+  retries: 0,
   reporter: [
     ['html', { open: 'never' }],
     ['allure-playwright']

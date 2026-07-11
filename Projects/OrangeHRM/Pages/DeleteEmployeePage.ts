@@ -5,10 +5,9 @@ export class DeleteEmployeePage {
     constructor(private page: Page) {}
 
     async goto() {
-        await this.page.goto(
-            'https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList'
-        );
-    }
+    await this.page.getByRole('link', { name: 'PIM', exact: true }).click();
+    await this.page.waitForLoadState('networkidle');
+}
 
     async searchEmployee(employeeName: string) {
         const hintsInput = this.page.getByRole('textbox', {
@@ -25,18 +24,35 @@ export class DeleteEmployeePage {
     }
 
     async deleteEmployee(employeeName: string) {
-        const employeeRow = this.page.locator('.oxd-table-card, [role="row"]').filter({ hasText: employeeName }).first();
 
-        await expect(employeeRow).toBeVisible();
-        await employeeRow.locator('.oxd-checkbox-input').click();
-        await this.page.getByRole('button', { name: /Delete/i }).click();
-        await this.page.getByRole('button', { name: /Yes, Delete/i }).click();
+    const employeeRow = this.page
+        .locator('.oxd-table-card, [role="row"]')
+        .filter({ hasText: employeeName })
+        .first();
 
-        await expect(
-            this.page.getByText(/Successfully Deleted/i)
-        ).toBeVisible();
+    await expect(employeeRow).toBeVisible();
 
-        console.log('Employee deleted successfully');
+    // Select employee
+    await employeeRow.locator('.oxd-checkbox-input').click();
+
+    // Click Delete Selected
+    await this.page.getByRole('button', {
+        name: /Delete Selected/i
+    }).click();
+
+    // Confirm deletion
+    await this.page.getByRole('button', {
+        name: /Yes,\s*Delete/i
+    }).click();
+
+        // Verify success message
+        const toast = this.page.getByText('Successfully Deleted', { exact: false });
+        await expect(toast).toContainText('Successfully Deleted');
+
+        console.log('Employee deleted successfully:', await toast.textContent());
+        
+
+       
     }
 
 }
