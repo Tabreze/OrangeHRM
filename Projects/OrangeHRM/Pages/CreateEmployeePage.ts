@@ -52,7 +52,8 @@ async goto() {
         
         // Verify success message
   const toast = this.page.getByText('Successfully Saved', { exact: false });
-await expect(toast).toBeVisible({ timeout: 15000 });
+await expect(toast).toContainText('Successfully Saved');
+
 console.log('Employee created successfully:', await toast.textContent());
     }   
 }

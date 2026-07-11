@@ -56,12 +56,9 @@ export class UpdateEmployeePage {
         await this.page.locator('form').filter({ hasText: 'Employee Full Name' })
             .getByRole('button', { name: 'Save' }).click();
 
-        // 8. Verify success toast
-        const toast = this.page.locator('.oxd-toast-content-text').first();
-        await expect(
-            this.page.getByText(/Successfully Updated/i)
-        ).toBeVisible();
-
-        console.log('Employee updated successfully');
+        // 8. Verify success message
+        const toast = this.page.getByText('Successfully Updated', { exact: false });
+        await expect(toast).toContainText('Successfully Updated');
+        console.log('Employee updated successfully:', await toast.textContent());
         }   
 }

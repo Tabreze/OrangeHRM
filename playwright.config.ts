@@ -7,7 +7,8 @@ dotenv.config({
 export default defineConfig({
   testDir: './Projects',
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false,
+  workers: 1,
   /* Retry once*/
   retries: 0,
   reporter: [
