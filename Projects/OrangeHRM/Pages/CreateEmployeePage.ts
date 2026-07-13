@@ -1,15 +1,20 @@
 import { Page, expect } from '@playwright/test';
+import { BasePage } from '../../Common/Utilities/BasePage';
 
-export class CreateEmployeePage {
-    constructor(private page: Page) {}
+export class CreateEmployeePage extends BasePage {
+    constructor( page: Page) {super(page);}
 
 async goto() {
-    await this.page.getByRole('link', { name: 'PIM', exact: true }).click();
-    await this.page.waitForLoadState('networkidle');
+    await this.safeClick(
+    this.page.getByRole('link', { name: 'PIM' })
+       // this.page.getByRole('heading', { name: 'Employee Information' })
+        //await this.page.waitForLoadState('networkidle')
+    );
 }
 
     async addEmployee(firstName: string, lastName: string) {
-        await this.page.getByRole('button', { name: ' Add' }).click();
+        await this.safeClick(
+	this.page.getByRole('button', { name: ' Add' }));
 
         await expect(
             this.page.getByRole('textbox', { name: 'First Name' })
@@ -28,7 +33,8 @@ async goto() {
 
         while (!saved && attempts < maxAttempts) {
             attempts++;
-            await this.page.getByRole('button', { name: 'Save' }).click();
+            await this.safeClick(
+	        this.page.getByRole('button', { name: 'Save' }));
 
             // Check if the duplicate-ID error appears within a short window
             const errorVisible = await idErrorMessage
@@ -55,5 +61,5 @@ async goto() {
 await expect(toast).toContainText('Successfully Saved');
 
 console.log('Employee created successfully:', await toast.textContent());
-    }   
+    }  
 }

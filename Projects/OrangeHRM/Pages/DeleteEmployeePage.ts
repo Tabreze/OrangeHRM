@@ -1,12 +1,14 @@
 import { Page, expect } from '@playwright/test';
+import { BasePage } from '../../Common/Utilities/BasePage';
 
-export class DeleteEmployeePage {
+export class DeleteEmployeePage extends BasePage {
+    constructor( page: Page) {super(page);
+    }
 
-    constructor(private page: Page) {}
-
-    async goto() {
-    await this.page.getByRole('link', { name: 'PIM', exact: true }).click();
-    await this.page.waitForLoadState('networkidle');
+async goto() {
+    await this.safeClick(
+    this.page.getByRole('link', { name: 'PIM' })
+    );
 }
 
     async searchEmployee(employeeName: string) {
@@ -39,17 +41,25 @@ export class DeleteEmployeePage {
     await this.page.getByRole('button', {
         name: /Delete Selected/i
     }).click();
+    console.log("Delete Selected clicked");
 
     // Confirm deletion
+    await expect(
+    this.page.getByText("Are you Sure?")
+    ).toBeVisible();
+
+    console.log("Popup displayed");
+
     await this.page.getByRole('button', {
-        name: /Yes,\s*Delete/i
+    name: /Yes,\s*Delete/i
     }).click();
 
-        // Verify success message
-        const toast = this.page.getByText('Successfully Deleted', { exact: false });
-        await expect(toast).toContainText('Successfully Deleted');
+    console.log("Yes Delete clicked");
 
-        console.log('Employee deleted successfully:', await toast.textContent());
+    // Verify success message
+const toast = this.page.getByText('Successfully Deleted', { exact: false });
+await expect(toast).toContainText('Successfully Deleted');
+console.log('Employee deleted successfully:', await toast.textContent());
         
 
        

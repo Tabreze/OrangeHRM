@@ -1,11 +1,15 @@
 import { Page, expect } from '@playwright/test';
+import { BasePage } from '../../Common/Utilities/BasePage';
 
-export class UpdateEmployeePage {
-    constructor(private page: Page) {}
+export class UpdateEmployeePage extends BasePage {
+    constructor(page: Page) {
+    super(page);
+    }
 
     async goto() {
-    await this.page.getByRole('link', { name: 'PIM', exact: true }).click();
-    await this.page.waitForLoadState('networkidle');
+    await this.safeClick(
+    this.page.getByRole('link', { name: 'PIM' })
+    );
 }
 
     async searchEmployee(employeeName: string) {
@@ -13,8 +17,8 @@ export class UpdateEmployeePage {
 
         await hintsInput.fill(employeeName);
         await this.page.getByRole('listbox').getByText(employeeName, { exact: false }).first().click();
-        await this.page.getByRole('button', { name: 'Search' }).click();
-
+        await this.safeClick(
+	    this.page.getByRole('button', { name: 'Search' }))
         await expect(this.page.locator('.oxd-table-body')).toBeVisible();
     }
 
@@ -53,8 +57,10 @@ export class UpdateEmployeePage {
         await this.page.getByText('5', { exact: true }).click();
 
         // 7. Save
-        await this.page.locator('form').filter({ hasText: 'Employee Full Name' })
-            .getByRole('button', { name: 'Save' }).click();
+        await this.safeClick(
+            this.page.locator('form').filter({ hasText: 'Employee Full Name' })
+                .getByRole('button', { name: 'Save' })
+        );
 
         // 8. Verify success message
         const toast = this.page.getByText('Successfully Updated', { exact: false });

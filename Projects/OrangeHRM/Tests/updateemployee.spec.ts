@@ -19,8 +19,8 @@ test('Verify Admin can update an existing employee', async ({ page }) => {
   await createEmployee.addEmployee(firstName, lastName);
   
   // Navigate to PIM module
-  await page.getByRole('link', { name: 'PIM' }).click();
-  await page.waitForLoadState('networkidle');
+  //await page.getByRole('link', { name: 'PIM' }).click();
+  //await page.waitForLoadState('networkidle');
   // Update employee personal details
   const updateEmployee = new UpdateEmployeePage(page);
   await updateEmployee.goto();
