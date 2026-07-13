@@ -9,5 +9,4 @@ node_modules/
 /playwright/.env.qa
 allure-results/
 allure-report/
-!.env.example
 *.log
