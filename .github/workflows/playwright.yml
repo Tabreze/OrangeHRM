@@ -32,8 +32,8 @@ jobs:
       run: npx playwright test
       env:
         BASE_URL: ${{ secrets.ORANGE_URL }}
-        USERNAME: ${{ secrets.ORANGE_USERNAME }}
-        PASSWORD: ${{ secrets.ORANGE_PASSWORD }}
+        ORANGE_USERNAME: ${{ secrets.ORANGE_USERNAME }}
+        ORANGE_PASSWORD: ${{ secrets.ORANGE_PASSWORD }}
     - name: Install Allure
       if: always()
       run: npm install -g allure-commandline
