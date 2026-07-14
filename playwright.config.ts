@@ -12,8 +12,9 @@ export default defineConfig({
   /* Retry once*/
   retries: 1,
   reporter: [
-    ['html', { open: 'never' }],
-    ['allure-playwright']
+  ['html'],
+  ['json', { outputFile: 'test-results/results.json' }],
+  ['allure-playwright']
 ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
