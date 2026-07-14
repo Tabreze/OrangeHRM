@@ -15,6 +15,11 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    environment: env.qa
+    env:
+       BASE_URL: ${{ vars.BASE_URL }}
+       ORANGE_USERNAME: ${{ secrets.ORANGE_USERNAME }}
+       ORANGE_PASSWORD: ${{ secrets.ORANGE_PASSWORD }}    
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -30,10 +35,6 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npx playwright test
-      env:
-        BASE_URL: ${{ vars.BASE_URL }}
-        ORANGE_USERNAME: ${{ vars.ORANGE_USERNAME }}
-        ORANGE_PASSWORD: ${{ vars.ORANGE_PASSWORD }}
     - name: Install Allure
       if: always()
       run: npm install -g allure-commandline
